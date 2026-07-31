@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Product Details</title>
+
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/product.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+  </head>
+
+  <body>
+    <header>
+      <div class="logo">
+        <a href="index.html">EliteStore</a>
+      </div>
+
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+
+      <div class="cart">
+        <a href="cart.html">
+          <i class="fa-solid fa-cart-shopping"></i>
+
+          <span id="cartCount">0</span>
+        </a>
+      </div>
+    </header>
+
+    <section class="product-container">
+      <div class="gallery">
+        <img id="mainImage" />
+
+        <div id="thumbnails"></div>
+      </div>
+
+      <div class="details">
+        <h1 id="title"></h1>
+
+        <h2 id="price"></h2>
+
+        <p id="description"></p>
+
+        <h4 id="category"></h4>
+
+        <button id="cartBtn">Add to Cart</button>
+      </div>
+    </section>
+
+    <section class="related">
+      <h2>Related Products</h2>
+
+      <div id="relatedProducts"></div>
+    </section>
+
+    <script src="js/api.js"></script>
+
+    <script src="js/product.js"></script>
+  </body>
+</html>

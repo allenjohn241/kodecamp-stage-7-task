@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Checkout</title>
+
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/checkout.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+  </head>
+
+  <body>
+    <header>
+      <div class="logo">
+        <a href="index.html">EliteStore</a>
+      </div>
+
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+
+      <div class="cart">
+        <a href="cart.html">
+          <i class="fa-solid fa-cart-shopping"></i>
+
+          <span id="cartCount">0</span>
+        </a>
+      </div>
+    </header>
+
+    <section class="checkout">
+      <div class="forms">
+        <h2>Billing Information</h2>
+
+        <form id="checkoutForm">
+          <input type="text" placeholder="Full Name" required />
+
+          <input type="email" placeholder="Email Address" required />
+
+          <input type="tel" placeholder="Phone Number" required />
+
+          <textarea placeholder="Billing Address" required></textarea>
+
+          <h2>Shipping Information</h2>
+
+          <label>
+            <input type="checkbox" id="sameAddress" />
+
+            Shipping address is the same as billing
+          </label>
+
+          <textarea
+            id="shippingAddress"
+            placeholder="Shipping Address"
+          ></textarea>
+
+          <h2>Payment Information</h2>
+
+          <input type="text" placeholder="Card Holder Name" required />
+
+          <input
+            type="text"
+            placeholder="Card Number"
+            maxlength="16"
+            required
+          />
+
+          <div class="payment-row">
+            <input type="text" placeholder="MM/YY" required />
+
+            <input type="text" placeholder="CVV" maxlength="3" required />
+          </div>
+
+          <button type="submit">Place Order</button>
+        </form>
+      </div>
+
+      <div class="order-summary">
+        <h2>Order Summary</h2>
+
+        <div id="orderItems"></div>
+
+        <h3>
+          Total:
+
+          <span id="grandTotal">$0</span>
+        </h3>
+      </div>
+    </section>
+
+    <script src="js/checkout.js"></script>
+  </body>
+</html>

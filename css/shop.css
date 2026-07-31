@@ -1,0 +1,39 @@
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.logo a {
+  color: #4caf50;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.logo a:hover {
+  color: #388e3c;
+}
+
+.shop-header {
+  padding: 70px 8%;
+  text-align: center;
+  background: #4caf50;
+  color: white;
+}
+
+.filters {
+  padding: 30px 8%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.filters select {
+  padding: 12px;
+  width: 250px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.active {
+  color: #4caf50;
+  font-weight: bold;
+}

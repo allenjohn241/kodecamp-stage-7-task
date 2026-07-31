@@ -1,0 +1,93 @@
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.logo a {
+  color: #4caf50;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.logo a:hover {
+  color: #388e3c;
+}
+
+.checkout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+  padding: 60px 8%;
+}
+
+.forms {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.forms h2 {
+  margin: 25px 0 15px;
+}
+
+.forms input,
+.forms textarea {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.forms textarea {
+  height: 120px;
+  resize: none;
+}
+
+.payment-row {
+  display: flex;
+  gap: 20px;
+}
+
+.forms button {
+  margin-top: 20px;
+  padding: 15px;
+  width: 100%;
+  background: #4caf50;
+  color: white;
+  font-size: 18px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.order-summary {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  height: fit-content;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+.order-summary h3 {
+  margin-top: 30px;
+  font-size: 25px;
+  color: #4caf50;
+}
+
+@media (max-width: 900px) {
+  .checkout {
+    grid-template-columns: 1fr;
+  }
+
+  .payment-row {
+    flex-direction: column;
+  }
+}
