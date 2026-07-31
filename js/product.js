@@ -1,91 +1,105 @@
 const params = new URLSearchParams(window.location.search);
-
 const productId = params.get("id");
 
 if (!productId) {
-  alert("No product selected.");
-  window.location.href = "index.html";
+    alert("No product selected.");
+    window.location.href = "shop.html";
 }
-const API = "https://api.escuelajs.co/api/v1/products";
+
+const API = "https://fakestoreapi.com/products";
 
 let currentProduct;
 
-console.log(window.location.href);
-console.log(productId);
-
+// Load Product
 function loadProduct() {
-  fetch(`${API}/${productId}`)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Product not found.");
-      }
 
-      return response.json();
-    })
+    fetch(`${API}/${productId}`)
 
-    .then((product) => {
-      currentProduct = product;
+        .then(response => {
 
-      document.getElementById("mainImage").src = product.image;
-      document.getElementById("title").textContent = product.title;
-      document.getElementById("price").textContent = "$" + product.price;
-      document.getElementById("description").textContent = product.description;
-      document.getElementById("category").textContent =
-        "Category: " + product.category;
+            if (!response.ok) {
+                throw new Error("Product not found.");
+            }
 
-      const thumbs = document.getElementById("thumbnails");
-      thumbs.innerHTML = "";
+            return response.json();
 
-      const thumbs = document.getElementById("thumbnails");
+        })
 
-      thumbs.innerHTML = `
+        .then(product => {
 
-<img src="${product.image}">
+            currentProduct = product;
 
-`;
+            document.getElementById("mainImage").src = product.image;
+            document.getElementById("title").textContent = product.title;
+            document.getElementById("price").textContent = `$${product.price}`;
+            document.getElementById("description").textContent = product.description;
+            document.getElementById("category").textContent = `Category: ${product.category}`;
 
-      document.getElementById("cartBtn").onclick = () => {
-        addToCart(product);
-      };
+            // Optional Rating
+            const rating = document.getElementById("rating");
+            if (rating) {
+                rating.textContent =
+                    `⭐ ${product.rating.rate} (${product.rating.count} Reviews)`;
+            }
 
-      loadRelated(product.category.id);
+            // Thumbnail
+            const thumbs = document.getElementById("thumbnails");
 
-      updateCart();
-    })
+            thumbs.innerHTML = `
+                <img src="${product.image}" alt="${product.title}">
+            `;
 
-    .catch((error) => {
-      console.error(error);
+            // Add to Cart Button
+            document.getElementById("cartBtn").onclick = function () {
+                addToCart(product);
+            };
 
-      alert("Unable to load product.");
+            loadRelated(product.category);
 
-      window.location.href = "shop.html";
-    });
+            updateCart();
+
+        })
+
+        .catch(error => {
+
+            console.error(error);
+
+            alert("Unable to load product.");
+
+            window.location.href = "shop.html";
+
+        });
+
 }
 
-loadProduct();
-
+// Load Related Products
 function loadRelated(category) {
-  fetch(API)
-    .then((response) => response.json())
 
-    .then((products) => {
-      const related = products
-        .filter((item) => item.category === category && item.id != productId)
-        .slice(0, 4);
+    fetch(API)
 
-      const container = document.getElementById("relatedProducts");
+        .then(response => response.json())
 
-      container.innerHTML = "";
+        .then(products => {
 
-      related.forEach((product) => {
-        container.innerHTML += `
+            const related = products
+                .filter(item =>
+                    item.category === category &&
+                    item.id != productId
+                )
+                .slice(0, 4);
+
+            const container = document.getElementById("relatedProducts");
+
+            container.innerHTML = "";
+
+            related.forEach(product => {
+
+                container.innerHTML += `
 
                 <div class="card">
 
                     <a href="product.html?id=${product.id}">
-
-                        <img src="${product.image}">
-
+                        <img src="${product.image}" alt="${product.title}">
                     </a>
 
                     <div class="card-body">
@@ -99,50 +113,64 @@ function loadRelated(category) {
                 </div>
 
                 `;
-      });
-    })
 
-    .catch((error) => console.error(error));
+            });
+
+        })
+
+        .catch(error => console.error(error));
+
 }
 
+// Add Product to Cart
 function addToCart(product) {
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  const exists = cart.find((item) => item.id === product.id);
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  if (exists) {
-    exists.quantity++;
-  } else {
-    cart.push({
-      id: product.id,
+    const existing = cart.find(item => item.id === product.id);
 
-      title: product.title,
+    if (existing) {
 
-      price: product.price,
+        existing.quantity++;
 
-      image: product.images,
+    } else {
 
-      quantity: 1,
-    });
-  }
+        cart.push({
 
-  localStorage.setItem("cart", JSON.stringify(cart));
+            id: product.id,
+            title: product.title,
+            price: product.price,
+            image: product.image,
+            quantity: 1
 
-  updateCart();
+        });
 
-  alert("Added to cart!");
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    updateCart();
+
+    alert("Added to cart!");
+
 }
 
+// Update Cart Count
 function updateCart() {
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  let total = 0;
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  cart.forEach((item) => {
-    total += item.quantity;
-  });
+    let total = 0;
 
-  document.getElementById("cartCount").textContent = total;
+    cart.forEach(item => {
+
+        total += item.quantity;
+
+    });
+
+    document.getElementById("cartCount").textContent = total;
+
 }
 
+// Start
 loadProduct();

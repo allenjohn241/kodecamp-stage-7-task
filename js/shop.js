@@ -7,52 +7,73 @@ const selectedCategory = params.get("category");
 
 let allProducts = [];
 
-// Load all products
+// Load Products
 function loadProducts() {
-  fetchProducts()
-    .then((products) => {
-      allProducts = products;
 
-      loadCategories();
+    fetchProducts()
 
-      if (selectedCategory) {
-        categoryFilter.value = selectedCategory;
+        .then(products => {
 
-        const filtered = allProducts.filter(
-          (product) =>
-            product.category.toLowerCase() ===
-            selectedCategory.toLowerCase(),
-        );
+            if (!products) {
+                throw new Error("No products received.");
+            }
 
-        renderProducts(filtered);
-      } else {
-        renderProducts(allProducts);
-      }
+            allProducts = products;
 
-      updateCart();
-    })
+            loadCategories();
 
-    .catch((error) => {
-      console.error(error);
+            if (selectedCategory) {
 
-      productContainer.innerHTML = "<h2>Unable to load products.</h2>";
-    });
+                categoryFilter.value = selectedCategory;
+
+                const filtered = allProducts.filter(product =>
+                    product.category.toLowerCase() ===
+                    selectedCategory.toLowerCase()
+                );
+
+                renderProducts(filtered);
+
+            } else {
+
+                renderProducts(allProducts);
+
+            }
+
+            updateCart();
+
+        })
+
+        .catch(error => {
+
+            console.error(error);
+
+            productContainer.innerHTML = `
+                <h2>Unable to load products.</h2>
+                <p>Please check your internet connection and try again.</p>
+            `;
+
+        });
+
 }
 
-loadProducts();
-
-// Display products
+// Display Products
 function renderProducts(products) {
-  productContainer.innerHTML = "";
 
-  if (products.length === 0) {
-    productContainer.innerHTML = "<h2>No products found.</h2>";
+    productContainer.innerHTML = "";
 
-    return;
-  }
+    if (products.length === 0) {
 
-  products.forEach((product) => {
-    productContainer.innerHTML += `
+        productContainer.innerHTML = "<h2>No products found.</h2>";
+
+        return;
+
+    }
+
+    let html = "";
+
+    products.forEach(product => {
+
+        html += `
 
         <div class="card">
 
@@ -75,94 +96,128 @@ function renderProducts(products) {
         </div>
 
         `;
-  });
+
+    });
+
+    productContainer.innerHTML = html;
+
 }
 
-// Populate category dropdown
+// Populate Category Dropdown
 function loadCategories() {
-  const categories = [
-    ...new Set(allProducts.map((product) => product.category)),
-  ];
 
-  categoryFilter.innerHTML = `<option value="all">All Categories</option>`;
+    const categories = [...new Set(
+        allProducts.map(product => product.category)
+    )];
 
-  categories.forEach((category) => {
-    categoryFilter.innerHTML += `
+    categoryFilter.innerHTML =
+        `<option value="all">All Categories</option>`;
 
+    categories.forEach(category => {
+
+        categoryFilter.innerHTML += `
             <option value="${category}">
                 ${category}
             </option>
-
         `;
-  });
+
+    });
+
 }
 
-// Category filter
+// Category Filter
 categoryFilter.addEventListener("change", () => {
-  const selected = categoryFilter.value;
 
-  if (selected === "all") {
-    renderProducts(allProducts);
+    const selected = categoryFilter.value;
 
-    return;
-  }
+    if (selected === "all") {
 
-  const filtered = allProducts.filter(
-    (product) => product.category === selected,
-  );
+        renderProducts(allProducts);
 
-  renderProducts(filtered);
+        return;
+
+    }
+
+    const filtered = allProducts.filter(product =>
+        product.category === selected
+    );
+
+    renderProducts(filtered);
+
 });
 
 // Search
 search.addEventListener("keyup", () => {
-  const keyword = search.value.toLowerCase();
 
-  const filtered = allProducts.filter((product) =>
-    product.title.toLowerCase().includes(keyword),
-  );
+    const keyword = search.value.toLowerCase();
 
-  renderProducts(filtered);
+    const filtered = allProducts.filter(product =>
+        product.title.toLowerCase().includes(keyword)
+    );
+
+    renderProducts(filtered);
+
 });
 
-// Add to cart
+// Add to Cart
 function addToCart(id) {
-  const product = allProducts.find((item) => item.id === id);
 
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const product = allProducts.find(item => item.id === id);
 
-  const existing = cart.find((item) => item.id === product.id);
+    if (!product) {
 
-  if (existing) {
-    existing.quantity++;
-  } else {
-    cart.push({
-      id: product.id,
-      title: product.title,
-      price: product.price,
-      image: product.image,
-      quantity: 1,
-    });
-  }
+        alert("Product not found.");
 
-  localStorage.setItem("cart", JSON.stringify(cart));
+        return;
 
-  updateCart();
+    }
 
-  alert("Product added to cart!");
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    const existing = cart.find(item => item.id === product.id);
+
+    if (existing) {
+
+        existing.quantity++;
+
+    } else {
+
+        cart.push({
+
+            id: product.id,
+            title: product.title,
+            price: product.price,
+            image: product.image,
+            quantity: 1
+
+        });
+
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    updateCart();
+
+    alert("Product added to cart!");
+
 }
 
-// Update cart badge
+// Update Cart Count
 function updateCart() {
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  let totalItems = 0;
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  cart.forEach((item) => {
-    totalItems += item.quantity;
-  });
+    let totalItems = 0;
 
-  document.getElementById("cartCount").textContent = totalItems;
+    cart.forEach(item => {
+
+        totalItems += item.quantity;
+
+    });
+
+    document.getElementById("cartCount").textContent = totalItems;
+
 }
 
+// Start App
 loadProducts();
